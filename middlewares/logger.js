@@ -7,4 +7,5 @@ module.exports = (req, res, next) => { // next() sert à passer le relai aux aut
     } catch {
         res.status(501).json({message: 'Erreur au niveau du logger'})
     }
+    
 }

@@ -9,6 +9,7 @@ app.use(compression());
 
 const DB_id = ENV.DB_ID;
 const DB_pw = ENV.DB_PW;
+
 const DB = 'mongodb+srv://' + DB_id + ':' + DB_pw + '@clustertest.lw5japt.mongodb.net/';
 
 // Passby CORS errors

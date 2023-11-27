@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const logger = require('../logger');
 
+
 const ENV = require('../environment/environment');
 
 module.exports = (req, res, next) => {
