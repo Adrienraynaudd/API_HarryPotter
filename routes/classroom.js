@@ -1,7 +1,7 @@
 const Classroom = require('../models/classroom');
 const axios = require('axios');
 const logger = require('../logger');
-
+const router = require('express').Router();
 exports.createClassroom = async (req, res) => {
     try {
         // Récupération des informations sur les étudiants, les enseignants et les sorts depuis l'API externe
@@ -55,3 +55,4 @@ function getRandomElements(array, count) {
     const shuffledArray = array.sort(() => 0.5 - Math.random());
     return shuffledArray.slice(0, count);
 }
+module.exports = router;

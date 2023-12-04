@@ -7,10 +7,8 @@ const ENV = require('./environment/environment');
 const app = express();
 app.use(compression());
 
-const DB_id = ENV.DB_ID;
-const DB_pw = ENV.DB_PW;
-
-const DB = 'mongodb+srv://' + DB_id + ':' + DB_pw + '@clustertest.lw5japt.mongodb.net/';
+// Construction de l'URL de connexion à MongoDB
+const DB = `mongodb://localhost:27017/API`; // Remplacez 'your-database-name' par le nom de votre base de données
 
 // Passby CORS errors
 app.use((req, res, next) => {
@@ -20,18 +18,16 @@ app.use((req, res, next) => {
     next();
 });
 
-mongoose.connect(DB).then(() => {
-    console.log('Connected to MongoDB with Success !');
+mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+    console.log('Connected to MongoDB with Success!');
 }).catch((err) => {
     console.log('MongoDB ERROR', err);
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 
 // ROUTES
-const apiRoutes = require('./routes/api');
-const classroomRoutes = require('./routes/classroom'); // Ajout des nouvelles routes
-app.use('/api/', apiRoutes);
-app.use('/api/classrooms/', classroomRoutes); // Utilisation du nouveau fichier de routes
+const classroomRoutes = require('./routes/classroom');
+app.use('/api/classrooms/', classroomRoutes);
 
 module.exports = app;
