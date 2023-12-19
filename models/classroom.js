@@ -1,14 +1,17 @@
+// Assurez-vous que votre modèle Classroom ressemble à quelque chose comme ceci
 const mongoose = require('mongoose');
 
-const classroomSchema = mongoose.Schema({
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
-    teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher', required: true },
-    spell: { type: mongoose.Schema.Types.ObjectId, ref: 'Spell', required: true },
-    creationDate: { type: Date, required: true },
-    modificationDate: { type: Date, required: true },
-    creationUser: { type: String, required: true },
-    modificationUser: { type: String, required: true },
-    active: { type: Boolean, required: true },
+const classroomSchema = new mongoose.Schema({
+    students: [String],
+  teacher: String,     
+  spell: String,    
+  creationDate: Date,
+  modificationDate: Date,
+  creationUser: String,
+  modificationUser: String,
+  active: Boolean,
 });
 
-module.exports = mongoose.model('Classroom', classroomSchema);
+const Classroom = mongoose.model('Classroom', classroomSchema);
+
+module.exports = Classroom;
