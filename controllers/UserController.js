@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const secretKey = 'adrienadrien';
+const secretKey = process.env.RANDOM_TOKEN_SECRET;
 const UserController = {
   createUser: async (req, res) => {
     try {

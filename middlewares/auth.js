@@ -1,6 +1,6 @@
 // middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const secretKey = 'adrienadrien';
+const secretKey = process.env.RANDOM_TOKEN_SECRET;
 
 const authenticateToken = (req, res, next) => {
   const token = req.header('Authorization');

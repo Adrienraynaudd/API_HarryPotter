@@ -2,12 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-const session = require('express-session');
 const User = require('./models/user');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { authenticateToken } = require('./middlewares/auth');
 const app = express();
 const port = process.env.PORT || 3000;
 const ejsPath = require.resolve('ejs');
@@ -54,6 +52,9 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get('/', (req, res) => {
+  if (!req.session.user) {
+    res.render(path.join(__dirname, 'views', 'index'));
+  }
   res.render(path.join(__dirname, 'views', 'index'), { user: req.session.user });
 });
 
@@ -88,7 +89,7 @@ app.get('/auth/google/callback', (req, res, next) => {
 
     // Stockez l'utilisateur dans la session
     console.log('User object:', user);
-    const token = jwt.sign({ userId: user._id }, 'adrienadrien', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, process.env.RANDOM_TOKEN_SECRET, { expiresIn: '1h' });
     req.session.user = user;
     req.session.token = token;
     // Redirigez l'utilisateur vers la page d'accueil
@@ -137,7 +138,7 @@ app.post('/login', async (req, res) => {
 
       if (passwordMatch) {
         // Utilisateur authentifié, générez un token JWT
-        const token = jwt.sign({ userId: user._id }, 'adrienadrien', { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.RANDOM_TOKEN_SECRET, { expiresIn: '1h' });
 
         // Enregistrez le token dans la session côté serveur (en plus de la session côté client)
         req.session.user = user;
