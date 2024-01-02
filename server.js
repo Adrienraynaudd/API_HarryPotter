@@ -38,7 +38,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: '9484950203-0chv63psg2br37oc2aua6m0s333khrg2.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'http://localhost:3000/auth/google/callback',
+  callbackURL: 'https://apiharrypotter.onrender.com/auth/google/callback',
 },
 (accessToken, refreshToken, profile, done) => {
   // Cette fonction sera appelée lorsqu'un utilisateur se connecte avec Google.
