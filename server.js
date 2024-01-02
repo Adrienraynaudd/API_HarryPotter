@@ -10,13 +10,16 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express();
 const port = process.env.PORT || 3000;
+const ENV = require('./environment/environment');
+const client = process.env.CLIENT;
 const ejsPath = require.resolve('ejs');
 const ejsMainPath = require('path').dirname(ejsPath);
 
 app.set('view engine', 'ejs');
 app.set('views', ejsMainPath);
-
-mongoose.connect('mongodb+srv://adrien:adrienadrien@cluster0.20qyxlc.mongodb.net/', {
+const password = ENV.PASSWORD;
+console.log(password);
+mongoose.connect(`mongodb+srv://adrien:${password}@cluster0.20qyxlc.mongodb.net/`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -37,7 +40,7 @@ app.use(passport.session());
 // Configuration de la stratégie Google
 passport.use(new GoogleStrategy({
   clientID: '9484950203-0chv63psg2br37oc2aua6m0s333khrg2.apps.googleusercontent.com',
-  clientSecret: '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',
+  clientSecret: client,
   callbackURL: 'https://apiharrypotter.onrender.com/auth/google/callback',
 },
 (accessToken, refreshToken, profile, done) => {

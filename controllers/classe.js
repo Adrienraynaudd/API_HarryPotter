@@ -79,8 +79,10 @@ exports.createClassroom = async (req, res) => {
 
         res.status(200).json({ message: 'Création de la salle de classe bien réalisée', classroom: savedClassroom });
         logInfo('Salle de classe bien créée', req);
+        console.log('Salle de classe bien créée');
     } catch (error) {
         logError('Erreur lors de la création de la salle de classe', error, req);
+        console.log('Erreur lors de la création de la salle de classe', error);
         res.status(500).json({ message: 'Erreur lors de la création de la salle de classe.', err: error });
     }
 };
@@ -96,9 +98,11 @@ exports.getClassroom = async (req, res) => {
         }
 
         logInfo('Salle de classe bien renvoyée', req);
+        console.log('Salle de classe bien renvoyée');
         res.status(200).json(classroom);
     } catch (error) {
         logError('Erreur lors de la récupération de la salle de classe', error, req);
+        console.log('Erreur lors de la récupération de la salle de classe', error);
         res.status(500).json({ message: 'Erreur lors de la récupération de la salle de classe.', err: error });
     }
 };
@@ -116,9 +120,11 @@ exports.updateClassroom = async (req, res) => {
         }
 
         logInfo('Salle de classe bien mise à jour', req);
+        console.log('Salle de classe bien mise à jour');
         res.status(200).json({ message: 'Modification de la salle de classe réussie', classroom: updatedClassroom });
     } catch (error) {
         logError('Erreur lors de la mise à jour de la salle de classe', error, req);
+        console.log('Erreur lors de la mise à jour de la salle de classe', error);
         res.status(500).json({ message: 'Erreur lors de la mise à jour de la salle de classe.', err: error });
     }
 };
@@ -134,9 +140,11 @@ exports.deleteClassroom = async (req, res) => {
         }
 
         logInfo('Salle de classe bien supprimée', req);
+        console.log('Salle de classe bien supprimée');
         res.status(200).json({ message: 'Suppression de la salle de classe réussie' });
     } catch (error) {
         logError('Erreur lors de la suppression de la salle de classe', error, req);
+        confsole.log('Erreur lors de la suppression de la salle de classe', error);
         res.status(500).json({ message: 'Erreur lors de la suppression de la salle de classe.', err: error });
     }
 };
@@ -147,13 +155,16 @@ exports.getClassroomList = async (req, res) => {
 
         if (classroomList.length === 0) {
             logInfo('Aucune salle de classe trouvée', req);
+            console.log('Aucune salle de classe trouvée');
             return res.status(404).json({ message: 'Pas de salle de classe trouvée' });
         }
 
         logInfo('Liste de salles de classe bien retournée', req);
+        console.log('Liste de salles de classe bien retournée');
         res.status(200).json(classroomList);
     } catch (error) {
         logError('Erreur lors de la récupération de la liste de salles de classe', error, req);
+        console.log('Erreur lors de la récupération de la liste de salles de classe', error);
         res.status(500).json({ message: 'Erreur lors de la récupération de la liste de salles de classe.', err: error });
     }
 };
