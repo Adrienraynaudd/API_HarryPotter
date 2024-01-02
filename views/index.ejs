@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Accueil</h1>
+    
+    <% if (user) { %>
+            <p>Bienvenue, <%= user.email %><%=  user.emails[0].value %>!</p>
+        <a href="/logout">Se déconnecter</a>
+        <a href="/class">Voir les salles de classe</a>
+    <% } else { %>
+        <p>Bienvenue sur la page d'accueil</p>
+        <a href="/register">S'inscrire</a>
+        <a href="/login">Se connecter</a>
+    <% } %>
+
+</body>
+</html>

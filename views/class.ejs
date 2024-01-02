@@ -1,0 +1,79 @@
+<!-- classrooms.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Salles de Classe</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Liste des Salles de Classe</h1>
+
+    <ul id="classroomList">
+        <!-- Les salles de classe seront ajoutées ici dynamiquement avec JavaScript -->
+    </ul>
+
+    <h2>Créer une Nouvelle Salle de Classe</h2>
+    <button id="createNewClassroom">Créer une Nouvelle Salle de Classe</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const classroomList = document.getElementById('classroomList');
+            const createNewClassroomBtn = document.getElementById('createNewClassroom');
+
+            // Fonction pour récupérer et afficher les salles de classe depuis l'API
+            const getClassrooms = async () => {
+                try {
+                    const response = await fetch('/classrooms');  // Changement ici pour la route
+                    const data = await response.json();
+
+                    classroomList.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach(classroom => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                <strong>Salle de Classe ${classroom._id}</strong>
+                                <ul>
+                                    <li>Enseignant: ${classroom.teacher}</li>
+                                    <li>Sort: ${classroom.spell}</li>
+                                    <li>Étudiants: ${classroom.students.join(', ')}</li>
+                                </ul>
+                            `;
+                            classroomList.appendChild(listItem);
+                        });
+                    } else {
+                        const noClassrooms = document.createElement('p');
+                        noClassrooms.textContent = 'Aucune salle de classe disponible.';
+                        classroomList.appendChild(noClassrooms);
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des salles de classe :', error);
+                }
+            };
+
+            // Ajouter un événement au clic sur le bouton pour créer une nouvelle salle de classe
+            createNewClassroomBtn.addEventListener('click', async () => {
+                try {
+                    const createClassroomResponse = await fetch('/classrooms', {
+                        method: 'POST'
+                    });
+
+                    if (createClassroomResponse.ok) {
+                        getClassrooms();
+                    } else {
+                        console.error('Erreur lors de la création de la salle de classe.');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la création de la salle de classe :', error);
+                }
+            });
+
+            // Appeler la fonction pour récupérer les salles de classe au chargement de la page
+            getClassrooms();
+        });
+    </script>
+</body>
+</html>
