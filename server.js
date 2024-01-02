@@ -16,7 +16,7 @@ const ejsMainPath = require('path').dirname(ejsPath);
 app.set('view engine', 'ejs');
 app.set('views', ejsMainPath);
 
-mongoose.connect('mongodb://127.0.0.1:27017/API', {
+mongoose.connect('mongodb+srv://adrien:adrienadrien@cluster0.20qyxlc.mongodb.net/', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
