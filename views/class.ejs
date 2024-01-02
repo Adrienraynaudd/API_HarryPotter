@@ -25,24 +25,6 @@
     <button id="createNewClassroom">Créer une Nouvelle Salle de Classe</button>
 
     <script>
-        // Fonction pour récupérer le token depuis les cookies
-        const getCookie = (name) => {
-            const cookies = document.cookie.split(';');
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.split('=');
-                if (cookieName.trim() === name) {
-                    return decodeURIComponent(cookieValue);
-                }
-            }
-            return null;
-        };
-
-        // Fonction pour récupérer le token côté client
-        const getToken = () => {
-            const tokenCookie = getCookie('token');
-            return tokenCookie;
-        };
-
         document.addEventListener('DOMContentLoaded', () => {
             const classroomList = document.getElementById('classroomList');
             const createNewClassroomBtn = document.getElementById('createNewClassroom');
@@ -81,12 +63,8 @@
             // Ajouter un événement au clic sur le bouton pour créer une nouvelle salle de classe
             createNewClassroomBtn.addEventListener('click', async () => {
                 try {
-                    const token = getToken();  // Récupérer le token
                     const createClassroomResponse = await fetch('/classrooms', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                        },
+                        method: 'POST'
                     });
 
                     if (createClassroomResponse.ok) {
