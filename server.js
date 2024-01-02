@@ -71,7 +71,7 @@ const classroomRoutes = require('./routes/classroom');
 app.use('/classrooms', classroomRoutes);
 
 app.get('/class', (req, res) => {
-  res.render(path.join(__dirname, 'views', 'class'));
+  res.render(path.join(__dirname, 'views', 'class'), { user: req.session.user });
 });
 // Routes pour l'authentification Google
 app.get('/auth/google',

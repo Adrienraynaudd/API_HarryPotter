@@ -10,7 +10,13 @@
 </head>
 <body>
     <h1>Liste des Salles de Classe</h1>
-
+    <% if (user) { %>
+        <a href="/">Accueil</a>
+    <% } else { %>
+        <script>
+            window.location.href = '/login';
+        </script>
+    <% } %>
     <ul id="classroomList">
         <!-- Les salles de classe seront ajoutées ici dynamiquement avec JavaScript -->
     </ul>

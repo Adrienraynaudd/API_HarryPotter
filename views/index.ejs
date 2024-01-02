@@ -10,7 +10,7 @@
     <h1>Accueil</h1>
     
     <% if (user) { %>
-            <p>Bienvenue, <%= user.email %><%=  user.emails[0].value %>!</p>
+        <p>Bienvenue, <%= user.email ? user.email : (user.emails && user.emails[0] ? user.emails[0].value : '') %>!</p>
         <a href="/logout">Se déconnecter</a>
         <a href="/class">Voir les salles de classe</a>
     <% } else { %>
