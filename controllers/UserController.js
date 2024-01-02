@@ -1,5 +1,6 @@
 const User = require('../models/user');
-
+const jwt = require('jsonwebtoken');
+const secretKey = 'adrienadrien';
 const UserController = {
   createUser: async (req, res) => {
     try {
@@ -176,6 +177,21 @@ const UserController = {
         res.status(500).json({ message: 'Erreur lors de la suppression de l\'utilisateur' });
       }
     },
+    login: async (req, res) => {
+      try {
+        const { email, password } = req.body;
+    
+        const user = await User.findOne({ email: email, password: password });
+        if (user) {
+          const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '6h' });
+          res.status(200).json({ token });
+        } else {
+          res.status(401).json({ message: 'Identifiants invalides' });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de la connexion' });
+      }
+    },
   };
-  
   module.exports = UserController;

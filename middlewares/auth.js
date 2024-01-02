@@ -1,30 +1,22 @@
+// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const logger = require('../logger');
-const ENV = require('../environment/environment');
+const secretKey = 'adrienadrien';
 
-module.exports = (req, res, next) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            throw new Error('Token absent');
-        }
+const authenticateToken = (req, res, next) => {
+  const token = req.header('Authorization');
 
-        const decodedToken = jwt.verify(token, ENV.RANDOM_TOKEN_SECRET);
+  if (!token) {
+    return res.status(401).json({ message: 'Token manquant' });
+  }
 
-        User.findOne({ email: decodedToken.user.email })
-            .then((user) => {
-                if (!user) {
-                    throw new Error('Utilisateur introuvable');
-                }
-                logger.warn({ message: `${user.name} fait une requête ${req.method} ${req.baseUrl}${req.path}` });
-                next();
-            })
-            .catch((err) => {
-                logger.error({ message: err.toString() });
-                res.status(403).json({ message: 'UNAUTHORIZED - 1' });
-            });
-    } catch (err) {
-        res.status(403).json({ message: 'UNAUTHORIZED - 0' });
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token non valide' });
     }
+
+    req.user = user;
+    next();
+  });
 };
+
+module.exports = { authenticateToken };

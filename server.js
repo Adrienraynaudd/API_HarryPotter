@@ -7,7 +7,7 @@ const User = require('./models/user');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
+const { authenticateToken } = require('../middlewares/auth');
 const app = express();
 const port = process.env.PORT || 3000;
 const ejsPath = require.resolve('ejs');
@@ -29,10 +29,7 @@ db.once('open', () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(express.static('public'));
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Configuration de la stratégie Google
 passport.use(new GoogleStrategy({
@@ -91,8 +88,9 @@ app.get('/auth/google/callback', (req, res, next) => {
 
     // Stockez l'utilisateur dans la session
     console.log('User object:', user);
+    const token = jwt.sign({ userId: user._id }, 'adrienadrien', { expiresIn: '1h' });
     req.session.user = user;
-
+    req.session.token = token;
     // Redirigez l'utilisateur vers la page d'accueil
     return res.redirect('/');
   })(req, res, next);
@@ -138,16 +136,27 @@ app.post('/login', async (req, res) => {
       const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 
       if (passwordMatch) {
+        // Utilisateur authentifié, générez un token JWT
+        const token = jwt.sign({ userId: user._id }, 'adrienadrien', { expiresIn: '1h' });
+
+        // Enregistrez le token dans la session côté serveur (en plus de la session côté client)
         req.session.user = user;
-        res.redirect('/');
+        req.session.token = token;
+
+        // Répondez avec le token et redirigez l'utilisateur
+        return res.status(200).json({ token });
       } else {
-        res.send('Mot de passe incorrect');
+        // Mot de passe incorrect
+        return res.status(401).json({ message: 'Mot de passe incorrect' });
       }
     } else {
-      res.send('Utilisateur non trouvé');
+      // Utilisateur non trouvé
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
   } catch (error) {
-    res.status(500).send('Erreur lors de la connexion de l\'utilisateur');
+    // Erreur lors de la connexion
+    console.error(error);
+    return res.status(500).json({ message: 'Erreur lors de la connexion de l\'utilisateur' });
   }
 });
 

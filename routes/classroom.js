@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ClassroomController = require('../controllers/classe');
-
+const { authenticateToken } = require('../middlewares/auth');
 // Route pour créer une salle de classe
 router.post('/', ClassroomController.createClassroom);
 
@@ -9,10 +9,10 @@ router.post('/', ClassroomController.createClassroom);
 router.get('/:id', ClassroomController.getClassroom);
 
 // Route pour mettre à jour une salle de classe par ID
-router.put('/:id', ClassroomController.updateClassroom);
+router.put('/:id',authenticateToken, ClassroomController.updateClassroom);
 
 // Route pour supprimer une salle de classe par ID
-router.delete('/:id', ClassroomController.deleteClassroom);
+router.delete('/:id',authenticateToken, ClassroomController.deleteClassroom);
 
 // Route pour récupérer la liste de toutes les salles de classe
 router.get('/', ClassroomController.getClassroomList);
